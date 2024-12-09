@@ -1,3 +1,163 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Secret Santa</title>
+    <style>
+        /* Your existing CSS... (no changes here) */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Christmas Secret Santa</h1>
+        <p style="font-size: 28px;">!اللي معاك Secret Santa اختار من هنا اسمك علشان تعرف مين</p>
+        
+        <!-- Buttons for selecting group -->
+        <div>
+            <button id="5aBoysButton" class="glow-button">5A Boys</button>
+            <button id="5aGirlsButton" class="glow-button">5A Girls</button>
+            <button id="6aBoysButton" class="glow-button">6A Boys</button>
+            <button id="6aGirlsButton" class="glow-button">6A Girls</button>
+        </div>
+
+        <form method="post" id="secret-santa-form">
+            <ul class="kid-list" id="kid-list">
+                <!-- The names will be dynamically inserted here -->
+            </ul>
+            <button type="submit" class="glow-button">Find your Secret Santa!</button>
+        </form>
+    </div>
+
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ho Ho Ho! 🎅</h2>
+            <p id="secret-santa-result"></p>
+            <button class="glow-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Group names data
+        const groups = {
+            "5A Boys": [
+                "Domadios", "Kiven", "Kirolos", "Karim", "Beshoy Magdy"
+            ],
+            "5A Girls": [
+                "Jan", "Patric", "Phelo", "Youssef Atef", "George Bassem"
+            ],
+            "6A Boys": [
+                "Michael", "Tino", "Anton", "Youssef Hany", "Keryakos"
+            ],
+            "6A Girls": [
+                "Jason", "Karas", "Adam", "Danial", "David Emad"
+            ]
+        };
+
+        // Function to dynamically load the names based on the selected group
+        function loadGroup(group) {
+            const kidList = document.getElementById('kid-list');
+            kidList.innerHTML = ''; // Clear the current list
+
+            // Add the new names for the selected group
+            groups[group].forEach(name => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<input type="radio" name="selected_kid" id="${name}" value="${name}">
+                                      <label for="${name}">${name}</label>`;
+                kidList.appendChild(listItem);
+            });
+        }
+
+        // Event listeners for buttons to change the group
+        document.getElementById('5aBoysButton').onclick = () => loadGroup("5A Boys");
+        document.getElementById('5aGirlsButton').onclick = () => loadGroup("5A Girls");
+        document.getElementById('6aBoysButton').onclick = () => loadGroup("6A Boys");
+        document.getElementById('6aGirlsButton').onclick = () => loadGroup("6A Girls");
+
+        // Modal Handling
+        const modal = document.getElementById("resultModal");
+        const closeBtn = document.getElementsByClassName("close")[0];
+
+        function showModal(secretSanta) {
+            const resultText = document.getElementById("secret-santa-result");
+            resultText.innerHTML = '<div class="spinner"></div><p>🤩🤩 لمين Secret Santa استني نشوف هتكون</p>';
+            modal.style.display = "block";
+
+            // After 4 seconds, show the secret Santa result
+            setTimeout(() => {
+                resultText.innerHTML = `🎄🎁 Merry Christmas! 🎄🎁 <br><br> <strong>${secretSanta}</strong> صديقك الخفي هو`;
+            }, 4000); 
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Handle form submission
+        document.getElementById('secret-santa-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            const selectedKid = document.querySelector('input[name="selected_kid"]:checked');
+            if (!selectedKid) {
+                alert("Please select a name first!");
+                return;
+            }
+
+            const selectedKidName = selectedKid.value;
+
+            // Define the Secret Santa mapping
+            const secretFriends = {
+                "domadios": "Adam",
+                "kiven": "Anton",
+                "kirolos": "Tino",
+                "jan": "Beshoy Magdy",
+                "karim": "Danial",
+                "beshoy magdy": "David Emad",
+                "patric": "Divo",
+                "phelo": "Domadios",
+                "yossef atef": "George Bassem",
+                "george bassem": "Jan",
+                "maikle": "Jason",
+                "tino": "Karas",
+                "anton": "Karim",
+                "yossef hany": "Keryakos",
+                "keryakos": "Kiven",
+                "jason": "Kirolos",
+                "karas": "Maikle",
+                "adam": "Patric",
+                "danial": "Phelo",
+                "david emad": "Youssab",
+                "divo": "Yousef hany",
+                "yossab": "Youssef atef"
+            };
+
+            // Get the corresponding Secret Santa
+            const secretSantaName = secretFriends[selectedKidName];
+
+            // Show the modal with the result
+            showModal(secretSantaName);
+        }
+
+        // Close modal when the close button is clicked
+        closeBtn.onclick = closeModal;
+
+        // Close modal when clicking outside the modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Load the default group (for example, 6A Boys) on page load
+        loadGroup("6A Boys");
+
+    </script>
+</body>
+</html>
+
+
+<!-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -666,3 +826,5 @@
     </script>
 </body>
 </html> -->
+
+-->
